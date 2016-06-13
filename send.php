@@ -36,6 +36,7 @@ function queueTask($contactIds) {
             $msg = new AMQPMessage($value, array('delivery_mode' => 2));
             $channel->basic_publish($msg, '', $queue);
         }
+        $connection->close();
     }
 }
 
