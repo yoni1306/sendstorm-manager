@@ -54,7 +54,10 @@ function resolveContactsHandler($channel_id, $contact_ids)
     $ch = getChannel($channel_id);
     $contact_phone_numbers = getContactPhoneNumbers($contact_ids);
 
-    if ($ch && $contact_phone_numbers) {
+    print_r($ch);
+    print_r($contact_phone_numbers);
+    
+    if (false && $ch && $contact_phone_numbers) {
         $username = "nickname";
         $password = $ch->secret;
         $u = $contact_phone_numbers;
