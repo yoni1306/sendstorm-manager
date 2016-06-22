@@ -74,28 +74,6 @@ function resolveContactsHandler($channel_id, $contact_ids)
             }
             $numbers[] = $number;
         }
-        //event handler
-        /**
-         * @param $result SyncResult
-         */
-        function onSyncResult($result)
-        {
-            foreach ($result->existing as $number) {
-                echo "$number exists " , "\n";
-
-                $phone_number = substr($number, 0, strpos($number, "@"));
-
-                markContactAsValid($phone_number);
-            }
-            foreach ($result->nonExisting as $number) {
-                echo "$number does not exist ", "\n";
-
-                $phone_number = substr($number, 0, strpos($number, "@"));
-
-                markContactAsInvalid($phone_number);
-            }
-            die(); //to break out of the while(true) loop
-        }
 
         try {
             $wa = new WhatsProt($username, 'WhatsApp', false);
@@ -110,14 +88,17 @@ function resolveContactsHandler($channel_id, $contact_ids)
                 $wa->pollMessage();
             }
         } catch (LoginFailureException $e){
-            echo 'Caught LoginFailureException, marking channel as blocked', "\n";
+            echo 'Caught LoginFailureException, marking channel ', $channel_id, ' as blocked', "\n";
             // Mark channel as blocked
             markChannelAsBlocked($channel_id);
 
+            echo 'Releasing contacts from channel ', $channel_id , "\n";
             // Release contacts from this channel so they will be picked next round
             releaseContactsFromChannel($contact_ids);
         } catch(Exception $e){
             echo 'Caught exception: ',  $e->getMessage(), "\n";
+
+            echo 'Releasing contacts from channel ', $channel_id , "\n";
 
             // Release contacts from this channel so they will be picked next round
             releaseContactsFromChannel($contact_ids);
@@ -125,6 +106,28 @@ function resolveContactsHandler($channel_id, $contact_ids)
     }
 }
 
+//event handler
+/**
+ * @param $result SyncResult
+ */
+function onSyncResult($result)
+{
+    foreach ($result->existing as $number) {
+        echo "$number exists " , "\n";
+
+        $phone_number = substr($number, 0, strpos($number, "@"));
+
+        markContactAsValid($phone_number);
+    }
+    foreach ($result->nonExisting as $number) {
+        echo "$number does not exist ", "\n";
+
+        $phone_number = substr($number, 0, strpos($number, "@"));
+
+        markContactAsInvalid($phone_number);
+    }
+    die(); //to break out of the while(true) loop
+}
 
 function trackContactsHandler($contactIDs)
 {
