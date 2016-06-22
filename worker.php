@@ -111,9 +111,16 @@ function resolveContactsHandler($channel_id, $contact_ids)
             }
         } catch (LoginFailureException $e){
             echo 'Caught LoginFailureException, marking channel as blocked', "\n";
+            // Mark channel as blocked
             markChannelAsBlocked($channel_id);
+
+            // Release contacts from this channel so they will be picked next round
+            releaseContactsFromChannel($contact_ids);
         } catch(Exception $e){
             echo 'Caught exception: ',  $e->getMessage(), "\n";
+
+            // Release contacts from this channel so they will be picked next round
+            releaseContactsFromChannel($contact_ids);
         }
     }
 }

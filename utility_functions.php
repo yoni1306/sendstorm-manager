@@ -26,8 +26,11 @@ function getContactPhoneNumbers($contact_ids)
 {
     try {
         $contact_ids = join(',', $contact_ids);
-        $result = getConnection()->query('SELECT phone_number FROM contacts WHERE contact_id IN (' . $contact_ids . ');');
-        return $result->fetchAll(PDO::FETCH_COLUMN);
+
+        $stmt = getConnection()->prepare('SELECT phone_number FROM contacts WHERE contact_id IN (?);');
+        $stmt->execute([$contact_ids]);
+
+        return $stmt->fetchAll(PDO::FETCH_COLUMN);
     } catch (Exception $e) {
         echo $e->getMessage() . "\n";
         return false;
@@ -62,6 +65,18 @@ function markContactAsValid($contact_phone_number)
 function markContactAsInvalid($contact_phone_number)
 {
     setContactsValidity($contact_phone_number, false);
+}
+
+function releaseContactsFromChannel($contact_ids){
+    try {
+        $contact_ids = join(',', $contact_ids);
+
+        $stmt = getConnection()->prepare('UPDATE operational_contacts SET channel_id = NULL WHERE contact_id IN (?);');
+        $stmt->execute([$contact_ids]);
+    } catch (Exception $e) {
+        echo $e->getMessage() . "\n";
+        return false;
+    }
 }
 
 function associateContactsToCampaign($campaign_id, $contact_ids)
