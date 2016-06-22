@@ -15,7 +15,9 @@ function getChannel($channel_id)
         $stmt = getConnection()->prepare("SELECT * FROM channels WHERE channel_id = ?");
         $stmt->execute([$channel_id]);
 
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return is_bool($result) ? $result : $result[0];
     } catch (Exception $e) {
         echo $e->getMessage() . "\n";
         return false;
@@ -27,7 +29,7 @@ function getContactPhoneNumbers($contact_ids)
     try {
         $contact_ids = join(',', $contact_ids);
         $result = getConnection()->query('SELECT phone_number FROM contacts WHERE contact_id IN (' . $contact_ids . ');');
-        return $result->fetchAll(PDO::FETCH_ASSOC);
+        return $result->fetchAll(PDO::FETCH_COLUMN);
     } catch (Exception $e) {
         echo $e->getMessage() . "\n";
         return false;
