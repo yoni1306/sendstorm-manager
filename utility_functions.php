@@ -25,6 +25,7 @@ function getChannel($channel_id)
 function getContactPhoneNumbers($contact_ids)
 {
     try {
+        $contact_ids = join(',', $contact_ids);
         $result = getConnection()->query('SELECT phone_number FROM contacts WHERE contact_id IN (' . $contact_ids . ');');
         return $result->fetchAll(PDO::FETCH_ASSOC);
     } catch (Exception $e) {
