@@ -107,6 +107,7 @@ function resolveContactsHandler($channel_id, $contact_ids)
                 $wa->pollMessage();
             }
         } catch (LoginFailureException $e){
+            echo 'Caught LoginFailureException, marking channel as blocked', "\n";
             markChannelAsBlocked($channel_id);
         } catch(Exception $e){
             echo 'Caught exception: ',  $e->getMessage(), "\n";
