@@ -15,9 +15,7 @@ function getChannel($channel_id)
         $stmt = getConnection()->prepare("SELECT * FROM channels WHERE channel_id = ?");
         $stmt->execute([$channel_id]);
 
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        return is_bool($result) ? $result : $result[0];
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     } catch (Exception $e) {
         echo $e->getMessage() . "\n";
         return false;
