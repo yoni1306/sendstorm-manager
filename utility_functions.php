@@ -12,20 +12,20 @@ require_once __DIR__ . '/connection.php';
 function getChannel($channel_id)
 {
     try {
-        $result = getConnection()
-            ->prepare("SELECT * FROM channels WHERE channel_id = ?")
-            ->execute([$channel_id]);
-        return $result->fetch(PDO::FETCH_ASSOC);
+        $stmt = getConnection()->prepare("SELECT * FROM channels WHERE channel_id = ?");
+        $stmt->execute([$channel_id]);
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     } catch (Exception $e) {
         echo $e->getMessage() . "\n";
         return false;
     }
 }
 
-function getContactPhoneNumbers($contact_ids){
+function getContactPhoneNumbers($contact_ids)
+{
     try {
-        $result = getConnection()
-            ->query('SELECT phone_number FROM contacts WHERE contact_id IN (' . $contact_ids . ');');
+        $result = getConnection()->query('SELECT phone_number FROM contacts WHERE contact_id IN (' . $contact_ids . ');');
         return $result->fetchAll(PDO::FETCH_ASSOC);
     } catch (Exception $e) {
         echo $e->getMessage() . "\n";
@@ -33,31 +33,33 @@ function getContactPhoneNumbers($contact_ids){
     }
 }
 
-function setContactValidity($contact_phone_number, $validity){
+function setContactValidity($contact_phone_number, $validity)
+{
     try {
-        getConnection()
-            ->prepare("UPDATE contacts SET status = ?, valid = ? WHERE phone_number = ?")
-            ->execute(["RESOLVED", $validity, $contact_phone_number]);
+        $stmt = getConnection()->prepare("UPDATE contacts SET status = ?, valid = ? WHERE phone_number = ?");
+        $stmt->execute(["RESOLVED", $validity, $contact_phone_number]);
     } catch (Exception $e) {
         echo $e->getMessage() . "\n";
     }
 }
 
-function markChannelAsBlocked($channel_id){
+function markChannelAsBlocked($channel_id)
+{
     try {
-        getConnection()
-            ->prepare("UPDATE channels SET valid = ? WHERE channel_id = ?")
-            ->execute([FALSE, $channel_id]);
+        $stmt = getConnection()->prepare("UPDATE channels SET valid = ? WHERE channel_id = ?");
+        $stmt->execute([FALSE, $channel_id]);
     } catch (Exception $e) {
         echo $e->getMessage() . "\n";
     }
 }
 
-function markContactAsValid($contact_phone_number){
+function markContactAsValid($contact_phone_number)
+{
     setContactsValidity($contact_phone_number, true);
 }
 
-function markContactAsInvalid($contact_phone_number){
+function markContactAsInvalid($contact_phone_number)
+{
     setContactsValidity($contact_phone_number, false);
 }
 
