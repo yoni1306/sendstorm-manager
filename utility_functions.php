@@ -59,12 +59,12 @@ function markChannelAsBlocked($channel_id)
 
 function markContactAsValid($contact_phone_number)
 {
-    setContactsValidity($contact_phone_number, true);
+    setContactValidity($contact_phone_number, true);
 }
 
 function markContactAsInvalid($contact_phone_number)
 {
-    setContactsValidity($contact_phone_number, false);
+    setContactValidity($contact_phone_number, false);
 }
 
 function releaseContactsFromChannel($contact_ids){
