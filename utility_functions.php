@@ -50,8 +50,8 @@ function setContactValidity($contact_phone_number, $validity)
 function markChannelAsBlocked($channel_id)
 {
     try {
-        $stmt = getConnection()->prepare("UPDATE channels SET valid = ? WHERE channel_id = ?");
-        $stmt->execute([FALSE, $channel_id]);
+        $stmt = getConnection()->prepare("UPDATE channels SET valid = FALSE, operation_type = NULL, used_contacts_amount = 0 WHERE channel_id = ?");
+        $stmt->execute([$channel_id]);
     } catch (Exception $e) {
         echo $e->getMessage() . "\n";
     }
