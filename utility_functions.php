@@ -79,6 +79,7 @@ function releaseContactsFromChannel($contact_ids){
     }
 }
 
+/*
 function associateContactsToCampaign($campaign_id, $contact_ids)
 {
     global $DBH;
@@ -317,23 +318,6 @@ function fetchUnresolvedAndNonOperationalContacts()
     return $unresolved_contacts_stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-function setContactsValidity(array $contact_ids, $is_valid)
-{
-    global $DBH;
-
-    $binded_contact_ids = join(',', $contact_ids);
-
-    $DBH->beginTransaction();
-
-    // Update global contact
-    $set_contacts_validity = $DBH->prepare('UPDATE contacts SET valid = :is_valid WHERE id IN (' . $binded_contact_ids . ');');
-    $set_contacts_validity->execute(array(':is_valid' => $is_valid));
-
-    // Update every operational occurence of that contact
-    $set_operational_contacts_validity = $DBH->prepare('UPDATE operation_contacts SET valid = :is_valid WHERE id IN (' . $binded_contact_ids . ');');
-    $set_operational_contacts_validity->execute(array(':is_valid' => $is_valid));
-
-    $DBH->commit();
-}
+*/
 
 ?>
