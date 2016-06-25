@@ -54,11 +54,12 @@ function resolveContactsHandler($channel_id, $contact_ids)
     $ch = getChannel($channel_id);
     $contact_phone_numbers = getContactPhoneNumbers($contact_ids);
 
+    print_r($ch['phone_number']);
     print_r($ch['secret']);
     print_r($contact_phone_numbers);
 
     if ($ch && $contact_phone_numbers) {
-        $username = "nickname";
+        $username = $ch['phone_number'];
         $password = $ch['secret'];
         $u = $contact_phone_numbers;
         $numbers = [];
@@ -74,6 +75,8 @@ function resolveContactsHandler($channel_id, $contact_ids)
             }
             $numbers[] = $number;
         }
+
+        print_r($numbers);
 
         try {
             $wa = new WhatsProt($username, 'WhatsApp', false);
