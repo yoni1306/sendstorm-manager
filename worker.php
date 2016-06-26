@@ -54,11 +54,11 @@ function resolveContactsHandler($channel_id, $contact_ids)
     $ch = getChannel($channel_id);
     $contact_phone_numbers = getContactPhoneNumbers($contact_ids);
 
-    echo "channel phone number:\n";
+    echo "\nchannel phone number:\n";
     print_r($ch['phone_number']);
-    echo "channel secret:\n";
+    echo "\nchannel secret:\n";
     print_r($ch['secret']);
-    echo "contact phone numbers:\n";
+    echo "\ncontact phone numbers:\n";
     print_r($contact_phone_numbers);
 
     if ($ch && $contact_phone_numbers) {
@@ -79,7 +79,7 @@ function resolveContactsHandler($channel_id, $contact_ids)
             $numbers[] = $number;
         }
 
-        echo "parsed contact phone numbers:\n";
+        echo "\nparsed contact phone numbers:\n";
         print_r($numbers);
 
         try {
